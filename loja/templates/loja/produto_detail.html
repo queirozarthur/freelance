@@ -1,0 +1,73 @@
+{% extends 'loja/base.html' %}
+{% load static %}
+
+{% block title %}{{ produto.nome }} - ATELIER{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-32 animate-fade-in">
+    <div class="grid md:grid-cols-2 gap-12 max-w-6xl mx-auto">
+        
+        <div class="aspect-[3/4] bg-gray-100 rounded-lg overflow-hidden">
+            {% if produto.foto_principal %}
+                <img src="{{ produto.foto_principal.url }}" class="w-full h-full object-cover hover:scale-105 transition duration-700">
+            {% else %}
+                <div class="flex items-center justify-center h-full text-gray-400">Sem Foto</div>
+            {% endif %}
+        </div>
+
+        <div class="flex flex-col justify-center space-y-6">
+            <div>
+                <span class="text-sm text-gray-500 uppercase tracking-wider">{{ produto.colecao.nome }}</span>
+                <h1 class="text-4xl font-serif font-medium text-gray-900 mt-2">{{ produto.nome }}</h1>
+                <p class="text-2xl font-medium text-gray-900 mt-4">R$ {{ produto.preco }}</p>
+            </div>
+
+            {% if produto.descricao %}
+                <p class="text-gray-600 leading-relaxed">{{ produto.descricao }}</p>
+            {% endif %}
+
+            <div>
+                <h3 class="text-sm font-medium text-gray-900 mb-3">SELECIONE O TAMANHO</h3>
+                <div class="flex gap-3">
+                    {% for variacao in variacoes %}
+                        <label class="cursor-pointer">
+                            <input type="radio" name="tamanho" value="{{ variacao.tamanho }}" class="peer sr-only">
+                            <div class="w-12 h-12 flex items-center justify-center border border-gray-200 rounded-md peer-checked:bg-black peer-checked:text-white peer-checked:border-black hover:border-black transition-all">
+                                {{ variacao.tamanho }}
+                            </div>
+                        </label>
+                    {% empty %}
+                        <p class="text-red-500 text-sm">Produto indisponível no momento.</p>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <button onclick="addCurrentProductToCart()" 
+                    class="w-full bg-black text-white py-4 text-sm font-bold tracking-wide uppercase hover:bg-gray-800 transition-all">
+                Adicionar à Sacola
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function addCurrentProductToCart() {
+        // Verifica qual tamanho foi selecionado
+        const selectedSize = document.querySelector('input[name="tamanho"]:checked');
+        
+        if (!selectedSize) {
+            alert("Por favor, selecione um tamanho.");
+            return;
+        }
+
+        // Chama a função global do base.html, agora passando o tamanho
+        addToCart(
+            '{{ produto.id }}-' + selectedSize.value, // Cria ID único por tamanho (ex: 1-M)
+            '{{ produto.nome }}', 
+            '{{ produto.preco }}', 
+            '{{ produto.foto_principal.url }}',
+            selectedSize.value // Passa o tamanho
+        );
+    }
+</script>
+{% endblock %}

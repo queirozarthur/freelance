@@ -1,0 +1,76 @@
+{% extends 'loja/base.html' %}
+{% load static %}
+
+{% block title %}ATELIER - Coleção de Verão{% endblock %}
+
+{% block content %}
+    <section class="relative h-screen w-full overflow-hidden">
+        
+        <div class="absolute inset-0 animate-hero-image">
+            <img src="{% static 'loja/img/hero-image.jpg' %}" 
+                 onerror="this.src='https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=2070&auto=format&fit=crop'"
+                 alt="Fashion hero" 
+                 class="w-full h-full object-cover"
+            />
+            <div class="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-white/90"></div>
+        </div>
+
+        <div class="relative h-full flex items-center justify-center z-10 pt-20">
+            <div class="text-center px-4 max-w-3xl">
+                <h1 class="animate-slide-up text-5xl md:text-7xl font-serif font-medium mb-6 text-white drop-shadow-md" style="animation-delay: 0.4s;">
+                    Summer Collection
+                </h1>
+                <p class="animate-slide-up text-lg md:text-xl text-white/90 mb-8 max-w-xl mx-auto font-light" style="animation-delay: 0.6s;">
+                    Descubra peças atemporais criadas para a individualidade moderna
+                </p>
+                <div class="animate-slide-up" style="animation-delay: 0.8s;">
+                    <button onclick="document.getElementById('products-area').scrollIntoView({behavior: 'smooth'})" 
+                            class="bg-white text-black hover:bg-gray-100 px-8 py-4 text-base font-medium uppercase tracking-wide transition-all transform hover:scale-105 shadow-lg">
+                        Ver Nova Coleção
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <main id="products-area" class="container mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        {% for colecao in colecoes %}
+            {% if colecao.produtos.all %}
+            <section class="mb-24">
+                <div class="mb-12 text-center animate-slide-up" style="animation-delay: 0.2s;">
+                    <h2 class="text-3xl md:text-4xl font-serif font-medium mb-3 text-foreground">{{ colecao.nome }}</h2>
+                    <div class="w-16 h-px bg-primary mx-auto"></div>
+                </div>
+
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
+                    {% for produto in colecao.produtos.all %}
+                        {% if produto.ativo %}
+                        <div class="group relative cursor-pointer">
+                            <a href="{% url 'produto_detail' produto.id %}">
+                                <div class="relative aspect-[3/4] overflow-hidden bg-muted mb-4">
+                                    {% if produto.foto_principal %}
+                                        <img src="{{ produto.foto_principal.url }}" class="w-full h-full object-cover transition duration-700 ease-out group-hover:scale-105">
+                                    {% else %}
+                                        <div class="w-full h-full flex items-center justify-center text-gray-300">Sem Foto</div>
+                                    {% endif %}
+                                </div>
+                            </a>
+
+                            <div class="space-y-2">
+                                <h3 class="font-medium text-sm text-foreground">{{ produto.nome }}</h3>
+                                <p class="font-medium text-sm text-foreground">R$ {{ produto.preco }}</p>
+                                
+                                <a href="{% url 'produto_detail' produto.id %}" 
+                                class="block w-full text-center py-2 mt-2 border border-input hover:bg-black hover:text-white transition-colors text-xs font-medium uppercase">
+                                Ver Opções
+                                </a>
+                            </div>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </section>
+            {% endif %}
+        {% endfor %}
+    </main>
+{% endblock %}

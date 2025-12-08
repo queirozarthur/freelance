@@ -18,7 +18,11 @@ from django.contrib import admin
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
+from loja.views import home
+from loja.views import produto_detail
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', home, name='home'),
+    path('produto/<int:id>/', produto_detail, name='produto_detail'),
 ] + static(settings.MEDIA_ROOT, document_root=settings.MEDIA_ROOT)

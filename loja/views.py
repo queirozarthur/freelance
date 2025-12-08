@@ -19,4 +19,4 @@ def sobre(request):
     context = {
         'titulo_pagina': 'Sobre Nós - Minha Loja'
     }
-    return render(request, 'sobre.html', context)
+    return render(request, 'loja/sobre.html', context)

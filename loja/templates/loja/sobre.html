@@ -1,41 +1,74 @@
 {% extends 'loja/base.html' %}
+{% load static %}
 
-{% block title %}Sobre Nós{% endblock %}
+{% block title %}Sobre Nós | LIVÍ {% endblock %}
 
 {% block content %}
-<div class="container my-5">
-    <div class="row">
-        <div class="col-md-8 offset-md-2">
-            
-            <h1 class="text-center mb-4">Quem Somos</h1>
-            
-            <hr>
-
-            <div class="texto-sobre">
-                <p>
-                    Bem-vindo à <strong>Minha Loja</strong>. Somos uma empresa dedicada a oferecer as melhores soluções para nossos clientes. 
-                    Nossa história começou com o desejo de transformar o mercado, trazendo inovação e qualidade em cada detalhe.
-                </p>
-
-                <p>
-                    Nossa missão é garantir a satisfação total, oferecendo produtos selecionados e um atendimento humanizado. 
-                    Trabalhamos incansavelmente para que sua experiência de compra seja simples, segura e eficiente.
-                </p>
-
-                <h3>Nossos Valores</h3>
-                <ul>
-                    <li><strong>Transparência:</strong> Agimos com integridade em todas as relações.</li>
-                    <li><strong>Qualidade:</strong> Não abrimos mão da excelência.</li>
-                    <li><strong>Foco no Cliente:</strong> Você é a razão do nosso negócio.</li>
-                </ul>
-
-                <p class="mt-4">
-                    Estamos localizados na capital, prontos para enviar nossos produtos para todo o Brasil. 
-                    Agradecemos a confiança e esperamos fazer parte do seu dia a dia.
-                </p>
-            </div>
-
-        </div>
+<div class="relative h-[400px] w-full flex items-center justify-center text-center text-white">
+    <div class="absolute inset-0 bg-black/50 z-10"></div>
+    <div class="absolute inset-0 z-0 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');"></div>
+    
+    <div class="relative z-20 px-4">
+        <h1 class="text-5xl md:text-6xl font-bold mb-4" style="font-family: 'Playfair Display', serif;">Nossa Essência</h1>
+        <p class="text-xl md:text-2xl font-light opacity-90" style="font-family: 'Inter', sans-serif;">Criando com alma, entregando com amor.</p>
     </div>
 </div>
+
+<div class="max-w-6xl mx-auto px-4 py-16" style="font-family: 'Inter', sans-serif;">
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center mb-20">
+        <div>
+            <span class="text-blue-600 font-semibold tracking-wider uppercase text-sm">Quem Somos</span>
+            <h2 class="text-4xl font-bold text-gray-900 mt-2 mb-6" style="font-family: 'Playfair Display', serif;">Do sonho à realidade</h2>
+            <p class="text-gray-600 mb-4 leading-relaxed">
+                A <strong>LIVÍ</strong> nasceu da vontade de fazer diferente. Em 2020, começamos pequenos, mas com uma visão gigante: transformar a maneira como as pessoas se conectam com o que compram.
+            </p>
+            <p class="text-gray-600 leading-relaxed">
+                Cada peça que sai da nossa loja carrega uma história. Valorizamos o processo manual, o design consciente e, acima de tudo, a satisfação de quem recebe nossos produtos.
+            </p>
+        </div>
+        <div class="relative">
+            <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                 alt="Nosso escritório" 
+                 class="rounded-lg shadow-xl w-full object-cover h-96">
+            <div class="absolute -bottom-6 -left-6 w-24 h-24 bg-blue-100 rounded-full -z-10"></div>
+        </div>
+    </div>
+
+    <div class="text-center mb-16">
+        <h2 class="text-3xl font-bold text-gray-900 mb-12" style="font-family: 'Playfair Display', serif;">Nossos Pilares</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="bg-white p-8 rounded-xl shadow-lg hover:-translate-y-2 transition-transform duration-300 border border-gray-100">
+                <div class="w-14 h-14 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i data-lucide="zap" class="w-8 h-8"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-3">Agilidade</h3>
+                <p class="text-gray-500 text-sm leading-relaxed">Não gostamos de esperar, e sabemos que você também não. Nossa logística é pensada para surpreender.</p>
+            </div>
+
+            <div class="bg-white p-8 rounded-xl shadow-lg hover:-translate-y-2 transition-transform duration-300 border border-gray-100">
+                <div class="w-14 h-14 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i data-lucide="gem" class="w-8 h-8"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-3">Exclusividade</h3>
+                <p class="text-gray-500 text-sm leading-relaxed">Curadoria feita a dedo. Produtos que unem funcionalidade, beleza e durabilidade.</p>
+            </div>
+
+            <div class="bg-white p-8 rounded-xl shadow-lg hover:-translate-y-2 transition-transform duration-300 border border-gray-100">
+                <div class="w-14 h-14 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i data-lucide="heart-handshake" class="w-8 h-8"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-3">Transparência</h3>
+                <p class="text-gray-500 text-sm leading-relaxed">Sem letras miúdas. Construímos relações baseadas na honestidade e no respeito ao consumidor.</p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    lucide.createIcons();
+</script>
+
 {% endblock %}

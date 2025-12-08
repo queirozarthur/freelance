@@ -97,14 +97,14 @@
                 html: `Você vai excluir <strong>${nomeProduto}</strong>.<br>Essa ação não pode ser desfeita!`,
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonColor: '#000000', // Preto
-                cancelButtonColor: '#d33',     // Vermelho
+                confirmButtonColor: '#000000', 
+                cancelButtonColor: '#d33',    
                 confirmButtonText: 'Sim, excluir!',
                 cancelButtonText: 'Cancelar',
                 reverseButtons: true
             }).then((result) => {
                 if (result.isConfirmed) {
-                    window.location.href = url; // Redireciona para apagar
+                    window.location.href = url;
                 }
             })
         }

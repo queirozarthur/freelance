@@ -1,69 +1,104 @@
 {% extends 'loja/base.html' %}
 {% load static %}
 
-{% block title %}{{ produto.nome }} - ATELIER{% endblock %}
+{% block title %}{{ produto.nome }} - LIVÍ{% endblock %}
 
 {% block content %}
 <div class="container mx-auto px-4 py-32 animate-fade-in">
     <div class="grid md:grid-cols-2 gap-12 max-w-6xl mx-auto">
         
-        <div class="aspect-[3/4] bg-gray-100 rounded-lg overflow-hidden">
+        <div class="aspect-[3/4] bg-gray-100 rounded-lg overflow-hidden relative group">
             {% if produto.foto_principal %}
-                <img src="{{ produto.foto_principal.url }}" class="w-full h-full object-cover hover:scale-105 transition duration-700">
+                <img src="{{ produto.foto_principal.url }}" 
+                     alt="{{ produto.nome }}"
+                     class="w-full h-full object-cover hover:scale-105 transition duration-700 ease-in-out">
             {% else %}
-                <div class="flex items-center justify-center h-full text-gray-400">Sem Foto</div>
+                <div class="flex items-center justify-center h-full text-gray-400 flex-col gap-2">
+                    <i data-lucide="image-off" class="w-8 h-8 opacity-50"></i>
+                    <span class="text-sm">Sem Foto</span>
+                </div>
+            {% endif %}
+
+            {% if not produto.ativo or not produto.tamanhos.exists %}
+                <div class="absolute inset-0 bg-white/60 flex items-center justify-center backdrop-blur-[2px]">
+                    <span class="bg-black text-white px-6 py-3 font-bold uppercase tracking-widest text-sm shadow-xl">
+                        Esgotado
+                    </span>
+                </div>
             {% endif %}
         </div>
 
         <div class="flex flex-col justify-center space-y-6">
+            
             <div>
                 {% if produto.colecao %}
-                    <span class="text-sm text-gray-500 uppercase tracking-wider">{{ produto.colecao.nome }}</span>
+                    <span class="text-sm text-gray-500 uppercase tracking-wider font-medium">{{ produto.colecao.nome }}</span>
                 {% endif %}
                 <h1 class="text-4xl font-serif font-medium text-gray-900 mt-2">{{ produto.nome }}</h1>
                 <p class="text-2xl font-medium text-gray-900 mt-4">R$ {{ produto.preco }}</p>
             </div>
 
             {% if produto.descricao %}
-                <p class="text-gray-600 leading-relaxed">{{ produto.descricao }}</p>
+                <p class="text-gray-600 leading-relaxed font-light">{{ produto.descricao|linebreaks }}</p>
             {% endif %}
 
-            <div>
-                <h3 class="text-sm font-medium text-gray-900 mb-3">SELECIONE O TAMANHO</h3>
-                <div class="flex gap-3">
-                    
+            <div class="border-t border-gray-100 pt-6 mt-2">
+                <h3 class="text-sm font-bold text-gray-900 mb-4 uppercase tracking-widest">Selecione o Tamanho</h3>
+                
+                <div class="flex flex-wrap gap-3">
                     {% for tamanho in produto.tamanhos.all %}
-                        <label class="cursor-pointer">
+                        <label class="cursor-pointer group">
                             <input type="radio" name="tamanho" value="{{ tamanho.nome }}" class="peer sr-only">
                             
-                            <div class="w-12 h-12 flex items-center justify-center border border-gray-200 rounded-md peer-checked:bg-black peer-checked:text-white peer-checked:border-black hover:border-black transition-all font-medium">
+                            <div class="w-12 h-12 flex items-center justify-center border border-gray-200 rounded-lg 
+                                      text-gray-600 font-medium transition-all duration-200
+                                      group-hover:border-black group-hover:bg-gray-50
+                                      peer-checked:bg-black peer-checked:text-white peer-checked:border-black peer-checked:shadow-md peer-checked:scale-105">
                                 {{ tamanho.nome }}
                             </div>
                         </label>
                     {% empty %}
-                        <p class="text-red-500 text-sm bg-red-50 px-3 py-2 rounded">
-                            Produto indisponível no momento.
-                        </p>
+                        <p class="text-gray-400 italic text-sm">Nenhum tamanho disponível.</p>
                     {% endfor %}
-                    
                 </div>
             </div>
 
-            <button onclick="addCurrentProductToCart()" 
-                    class="w-full bg-black text-white py-4 text-sm font-bold tracking-wide uppercase hover:bg-gray-800 transition-all shadow-lg mt-4">
-                Adicionar à Sacola
-            </button>
+            <div class="mt-4">
+                {% if produto.ativo and produto.tamanhos.exists %}
+                    
+                    <button onclick="addCurrentProductToCart()" 
+                            class="w-full bg-black text-white py-4 text-sm font-bold tracking-wide uppercase hover:bg-gray-900 transition-all shadow-lg transform active:scale-[0.99]">
+                        Adicionar à Sacola
+                    </button>
+                    
+                    <p class="text-center text-xs text-gray-400 mt-3 flex items-center justify-center gap-1">
+                        <i data-lucide="shield-check" class="w-3 h-3"></i> Compra Segura via WhatsApp
+                    </p>
+
+                {% else %}
+
+                    <button disabled 
+                            class="w-full bg-gray-200 text-gray-400 py-4 text-sm font-bold tracking-wide uppercase cursor-not-allowed border border-gray-200">
+                        FORA DE ESTOQUE
+                    </button>
+                    
+                {% endif %}
+            </div>
+
         </div>
     </div>
 </div>
 
 <script>
+    // Garante ícones caso recarregue via AJAX (opcional)
+    lucide.createIcons();
+
     function addCurrentProductToCart() {
         // Verifica qual tamanho foi selecionado
         const selectedSize = document.querySelector('input[name="tamanho"]:checked');
         
         if (!selectedSize) {
-            // Se o cliente não escolheu tamanho, dá um alerta (pode usar Toast aqui depois)
+            // Se o cliente não escolheu tamanho, dá um alerta bonito (usando o toast do base.html se possível, ou alert nativo)
             alert("Por favor, selecione um tamanho para continuar.");
             return;
         }
@@ -73,7 +108,7 @@
             '{{ produto.id }}-' + selectedSize.value, // ID único: "15-M"
             '{{ produto.nome }}', 
             '{{ produto.preco }}', 
-            '{{ produto.foto_principal.url }}',
+            {% if produto.foto_principal %} '{{ produto.foto_principal.url }}' {% else %} '' {% endif %}, // Trata imagem vazia
             selectedSize.value // Passa o tamanho (P, M, G)
         );
     }

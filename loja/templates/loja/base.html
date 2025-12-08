@@ -93,14 +93,70 @@
                 <span id="cart-total-price" class="font-serif">R$ 0,00</span>
             </div>
             
-            <div>
-                <label class="block text-xs font-medium text-gray-500 mb-1">MÉTODO DE PAGAMENTO</label>
-                <select id="payment-method" class="w-full p-2 text-sm border border-gray-200 rounded bg-white focus:ring-1 focus:ring-black outline-none">
-                    <option value="PIX">PIX</option>
-                    <option value="Cartão de Crédito">Cartão de Crédito</option>
-                    <option value="Dinheiro">Dinheiro</option>
-                </select>
+            <div class="space-y-4">
+                <h3 class="text-sm font-bold text-gray-900 uppercase tracking-widest mb-4">
+                    Método de Pagamento
+                </h3>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    
+                    <label class="cursor-pointer relative">
+                        <input type="radio" name="metodo_pagamento" value="pix" class="peer sr-only" checked>
+                        <div class="p-4 border rounded-xl flex flex-col items-center justify-center gap-2 transition-all duration-200
+                                    bg-white border-gray-200 text-gray-600
+                                    hover:border-black hover:shadow-md
+                                    peer-checked:border-black peer-checked:bg-black peer-checked:text-white peer-checked:shadow-lg">
+                            
+                            <i data-lucide="qr-code" class="w-6 h-6 mb-1"></i>
+                            <span class="font-bold text-sm">PIX</span>
+                            <span class="text-xs opacity-70">-5% OFF</span>
+                        </div>
+                        
+                        <div class="absolute top-2 right-2 opacity-0 peer-checked:opacity-100 transition-opacity">
+                            <i data-lucide="check-circle-2" class="w-4 h-4 text-white"></i>
+                        </div>
+                    </label>
+
+                    <label class="cursor-pointer relative">
+                        <input type="radio" name="metodo_pagamento" value="cartao" class="peer sr-only">
+                        <div class="p-4 border rounded-xl flex flex-col items-center justify-center gap-2 transition-all duration-200
+                                    bg-white border-gray-200 text-gray-600
+                                    hover:border-black hover:shadow-md
+                                    peer-checked:border-black peer-checked:bg-black peer-checked:text-white peer-checked:shadow-lg">
+                            
+                            <i data-lucide="credit-card" class="w-6 h-6 mb-1"></i>
+                            <span class="font-bold text-sm">Cartão</span>
+                            <span class="text-xs opacity-70">Até 12x</span>
+                        </div>
+                        
+                        <div class="absolute top-2 right-2 opacity-0 peer-checked:opacity-100 transition-opacity">
+                            <i data-lucide="check-circle-2" class="w-4 h-4 text-white"></i>
+                        </div>
+                    </label>
+
+                    <label class="cursor-pointer relative">
+                        <input type="radio" name="metodo_pagamento" value="dinheiro" class="peer sr-only">
+                        <div class="p-4 border rounded-xl flex flex-col items-center justify-center gap-2 transition-all duration-200
+                                    bg-white border-gray-200 text-gray-600
+                                    hover:border-black hover:shadow-md
+                                    peer-checked:border-black peer-checked:bg-black peer-checked:text-white peer-checked:shadow-lg">
+                            
+                            <i data-lucide="banknote" class="w-6 h-6 mb-1"></i>
+                            <span class="font-bold text-sm">Dinheiro</span>
+                            <span class="text-xs opacity-70">Na entrega</span>
+                        </div>
+                        
+                        <div class="absolute top-2 right-2 opacity-0 peer-checked:opacity-100 transition-opacity">
+                            <i data-lucide="check-circle-2" class="w-4 h-4 text-white"></i>
+                        </div>
+                    </label>
+
+                </div>
             </div>
+
+            <script>
+                lucide.createIcons();
+            </script>
 
             <button onclick="checkoutWhatsApp()" class="w-full bg-primary text-white py-4 text-sm font-medium tracking-wide hover:opacity-90 transition-all active:scale-[0.98]">
                 FINALIZAR NO WHATSAPP
@@ -241,32 +297,43 @@
         }
 
         function checkoutWhatsApp() {
-            if (cart.length === 0) return;
+            if (cart.length === 0) {
+                alert("Seu carrinho está vazio!");
+                return;
+            }
             
             const total = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
-            const refId = Math.random().toString(36).substring(2, 8).toUpperCase();
+            const refId = Math.random().toString(36).substring(2, 7).toUpperCase();
             
+            const paymentInput = document.querySelector('input[name="metodo_pagamento"]:checked');
+            
+            if (!paymentInput) {
+                alert("Por favor, selecione uma forma de pagamento.");
+                return;
+            }
 
-            const payment = document.getElementById('payment-method').value;
+            const paymentValue = paymentInput.value;
 
-            let msg = `Olá! Gostaria de finalizar o pedido no * *:\n\n`;
+            // 3. Deixa o nome bonito para enviar no Zap
+            const nomesPagamento = {
+                'pix': 'PIX (5% OFF)',
+                'cartao': 'Cartão de Crédito/Débito',
+                'dinheiro': 'Dinheiro na Entrega'
+            };
+            const nomeFinalPagamento = nomesPagamento[paymentValue] || paymentValue;
+            // ----------------------------
+
+            let msg = `Olá! Gostaria de finalizar o pedido *#${refId}* na LIVÍ:\n\n`;
             
             cart.forEach(item => { 
                 const sizeInfo = item.size ? ` (Tam: ${item.size})` : '';
                 msg += `▪ ${item.quantity}x ${item.name}${sizeInfo} - R$ ${(item.price * item.quantity).toFixed(2)}\n`; 
             });
 
-            msg += `\n*Subtotal:* R$ ${total.toFixed(2)}`;
-            msg += `\n*Pagamento:* ${payment}`;
+            msg += `\n*Total:* R$ ${total.toFixed(2)}`;
+            msg += `\n*Forma de Pagamento:* ${nomeFinalPagamento}`;
 
             window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
-        }
-
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            document.getElementById('toast-msg').innerText = message;
-            toast.classList.remove('translate-y-20', 'opacity-0');
-            setTimeout(() => { toast.classList.add('translate-y-20', 'opacity-0'); }, 3000);
         }
     </script>
 </body>

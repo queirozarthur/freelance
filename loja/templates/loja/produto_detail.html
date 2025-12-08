@@ -17,7 +17,9 @@
 
         <div class="flex flex-col justify-center space-y-6">
             <div>
-                <span class="text-sm text-gray-500 uppercase tracking-wider">{{ produto.colecao.nome }}</span>
+                {% if produto.colecao %}
+                    <span class="text-sm text-gray-500 uppercase tracking-wider">{{ produto.colecao.nome }}</span>
+                {% endif %}
                 <h1 class="text-4xl font-serif font-medium text-gray-900 mt-2">{{ produto.nome }}</h1>
                 <p class="text-2xl font-medium text-gray-900 mt-4">R$ {{ produto.preco }}</p>
             </div>
@@ -29,21 +31,26 @@
             <div>
                 <h3 class="text-sm font-medium text-gray-900 mb-3">SELECIONE O TAMANHO</h3>
                 <div class="flex gap-3">
-                    {% for variacao in variacoes %}
+                    
+                    {% for tamanho in produto.tamanhos.all %}
                         <label class="cursor-pointer">
-                            <input type="radio" name="tamanho" value="{{ variacao.tamanho }}" class="peer sr-only">
-                            <div class="w-12 h-12 flex items-center justify-center border border-gray-200 rounded-md peer-checked:bg-black peer-checked:text-white peer-checked:border-black hover:border-black transition-all">
-                                {{ variacao.tamanho }}
+                            <input type="radio" name="tamanho" value="{{ tamanho.nome }}" class="peer sr-only">
+                            
+                            <div class="w-12 h-12 flex items-center justify-center border border-gray-200 rounded-md peer-checked:bg-black peer-checked:text-white peer-checked:border-black hover:border-black transition-all font-medium">
+                                {{ tamanho.nome }}
                             </div>
                         </label>
                     {% empty %}
-                        <p class="text-red-500 text-sm">Produto indisponível no momento.</p>
+                        <p class="text-red-500 text-sm bg-red-50 px-3 py-2 rounded">
+                            Produto indisponível no momento.
+                        </p>
                     {% endfor %}
+                    
                 </div>
             </div>
 
             <button onclick="addCurrentProductToCart()" 
-                    class="w-full bg-black text-white py-4 text-sm font-bold tracking-wide uppercase hover:bg-gray-800 transition-all">
+                    class="w-full bg-black text-white py-4 text-sm font-bold tracking-wide uppercase hover:bg-gray-800 transition-all shadow-lg mt-4">
                 Adicionar à Sacola
             </button>
         </div>
@@ -56,17 +63,18 @@
         const selectedSize = document.querySelector('input[name="tamanho"]:checked');
         
         if (!selectedSize) {
-            alert("Por favor, selecione um tamanho.");
+            // Se o cliente não escolheu tamanho, dá um alerta (pode usar Toast aqui depois)
+            alert("Por favor, selecione um tamanho para continuar.");
             return;
         }
 
-        // Chama a função global do base.html, agora passando o tamanho
+        // Chama a função global do carrinho
         addToCart(
-            '{{ produto.id }}-' + selectedSize.value, // Cria ID único por tamanho (ex: 1-M)
+            '{{ produto.id }}-' + selectedSize.value, // ID único: "15-M"
             '{{ produto.nome }}', 
             '{{ produto.preco }}', 
             '{{ produto.foto_principal.url }}',
-            selectedSize.value // Passa o tamanho
+            selectedSize.value // Passa o tamanho (P, M, G)
         );
     }
 </script>

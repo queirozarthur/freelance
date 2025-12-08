@@ -1,0 +1,76 @@
+{% extends 'loja/admin_base.html' %}
+
+{% block title %}Nossos Produtos | LIVÍ{% endblock %}
+
+{% block content %}
+
+<div class="bg-gray-50 py-12 text-center">
+    <h1 class="text-4xl font-bold text-gray-900" style="font-family: 'Playfair Display', serif;">Nossas Coleções</h1>
+    <p class="text-gray-500 mt-2">Explore nossas peças exclusivas</p>
+</div>
+
+<div class="max-w-7xl mx-auto px-4 py-8">
+
+    {% for colecao in colecoes %}
+        
+        {% if colecao.produtos.exists %}
+        <div class="mb-16">
+            
+            <div class="flex items-center gap-4 mb-8">
+                <h2 class="text-3xl font-bold text-gray-800" style="font-family: 'Playfair Display', serif;">
+                    {{ colecao.nome }}
+                </h2>
+                <div class="h-px bg-gray-300 flex-1"></div> </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+                
+                {% for produto in colecao.produtos.all %}
+                    {% if produto.ativo %}
+                    <div class="group">
+                        <div class="relative overflow-hidden rounded-lg shadow-sm border border-gray-100 bg-white">
+                            
+                            <a href="{% url 'produto_detail' produto.id %}">
+                                <div class="aspect-[3/4] overflow-hidden bg-gray-200">
+                                    {% if produto.foto_principal %}
+                                        <img src="{{ produto.foto_principal.url }}" 
+                                             class="h-full w-full object-cover object-center group-hover:scale-105 transition-transform duration-500" 
+                                             alt="{{ produto.nome }}">
+                                    {% else %}
+                                        <div class="h-full w-full flex items-center justify-center text-gray-400 bg-gray-100">
+                                            Sem foto
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </a>
+
+                            <div class="p-4">
+                                <h3 class="text-lg font-medium text-gray-900">
+                                    <a href="{% url 'produto_detail' produto.id %}">
+                                        {{ produto.nome }}
+                                    </a>
+                                </h3>
+                                <p class="mt-1 text-sm text-gray-500 line-clamp-2">
+                                    {{ produto.descricao }}
+                                </p>
+                                <p class="mt-2 text-lg font-bold text-blue-600">
+                                    R$ {{ produto.preco }}
+                                </p>
+                            </div>
+
+                        </div>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+
+            </div>
+        </div>
+        {% endif %}
+
+    {% empty %}
+        <div class="text-center py-20">
+            <p class="text-gray-500 text-xl">Nenhuma coleção cadastrada no momento.</p>
+        </div>
+    {% endfor %}
+
+</div>
+{% endblock %}

@@ -25,6 +25,7 @@ from loja.views import dashboard
 from loja.views import produto_remover
 from loja.views import produto_editar
 from loja.views import produto_criar
+from loja.views import lista_produtos 
 
 
 
@@ -37,4 +38,5 @@ urlpatterns = [
     path('produto/novo/', produto_criar, name='produto_criar'),
     path('produto/editar/<int:id>/', produto_editar, name='produto_editar'),
     path('produto/remover/<int:id>/', produto_remover, name='produto_remover'), 
+    path('produtos/', lista_produtos, name='lista_produtos'),
 ] + static(settings.MEDIA_ROOT, document_root=settings.MEDIA_ROOT)

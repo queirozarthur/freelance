@@ -76,3 +76,8 @@ def produto_remover(request, id):
     produto = get_object_or_404(Produto, id=id)
     produto.delete()
     return redirect('dashboard')
+
+def lista_produtos(request):
+    colecoes = Colecao.objects.prefetch_related('produtos').all()
+    
+    return render(request, 'loja/produtos.html', {'colecoes': colecoes})

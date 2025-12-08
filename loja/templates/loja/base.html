@@ -314,14 +314,12 @@
 
             const paymentValue = paymentInput.value;
 
-            // 3. Deixa o nome bonito para enviar no Zap
             const nomesPagamento = {
                 'pix': 'PIX (5% OFF)',
                 'cartao': 'Cartão de Crédito/Débito',
                 'dinheiro': 'Dinheiro na Entrega'
             };
             const nomeFinalPagamento = nomesPagamento[paymentValue] || paymentValue;
-            // ----------------------------
 
             let msg = `Olá! Gostaria de finalizar o pedido *#${refId}* na LIVÍ:\n\n`;
             

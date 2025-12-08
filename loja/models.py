@@ -9,7 +9,7 @@ class Colecao(models.Model):
         return self.nome
 
 class Tamanho(models.Model):
-    nome = models.CharField(max_length=5) # Ex: P, M, G, 40, 42
+    nome = models.CharField(max_length=5) 
     
     def __str__(self):
         return self.nome

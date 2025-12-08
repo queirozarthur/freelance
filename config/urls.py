@@ -22,11 +22,19 @@ from loja.views import home
 from loja.views import produto_detail
 from loja.views import sobre
 from loja.views import dashboard
-    
+from loja.views import produto_remover
+from loja.views import produto_editar
+from loja.views import produto_criar
+
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home, name='home'),
     path('produto/<int:id>/', produto_detail, name='produto_detail'),
     path('sobre/', sobre, name='sobre'),
-    path('dashboard/', dashboard, name='dashboard'),    
+    path('dashboard/', dashboard, name='dashboard'),   
+    path('produto/novo/', produto_criar, name='produto_criar'),
+    path('produto/editar/<int:id>/', produto_editar, name='produto_editar'),
+    path('produto/remover/<int:id>/', produto_remover, name='produto_remover'), 
 ] + static(settings.MEDIA_ROOT, document_root=settings.MEDIA_ROOT)

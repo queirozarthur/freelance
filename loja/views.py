@@ -1,6 +1,7 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from .models import Colecao, Produto
 from django.contrib.auth.decorators import login_required
+from .forms import ProdutoForm
 
 def home(request):
     colecoes = Colecao.objects.filter(ativa=True).prefetch_related('produtos')
@@ -41,3 +42,37 @@ def dashboard(request):
         # 'colecoes': colecoes
     }
     return render(request, 'loja/dashboard.html', context)
+
+@login_required(login_url='/admin/login/')
+def produto_criar(request):
+    if request.method == 'POST':
+        form = ProdutoForm(request.POST, request.FILES) # request.FILES é obrigatório para upload de imagens
+        if form.is_valid():
+            form.save()
+            return redirect('dashboard') # Volta para o painel depois de salvar
+    else:
+        form = ProdutoForm()
+    
+    return render(request, 'loja/produto_form.html', {'form': form, 'titulo': 'Novo Produto'})
+
+# 2. EDITAR PRODUTO
+@login_required(login_url='/admin/login/')
+def produto_editar(request, id):
+    produto = get_object_or_404(Produto, id=id) # Pega o produto ou dá erro 404 se não existir
+    
+    if request.method == 'POST':
+        form = ProdutoForm(request.POST, request.FILES, instance=produto) # 'instance' carrega os dados atuais
+        if form.is_valid():
+            form.save()
+            return redirect('dashboard')
+    else:
+        form = ProdutoForm(instance=produto)
+    
+    return render(request, 'loja/produto_form.html', {'form': form, 'titulo': 'Editar Produto'})
+
+# 3. REMOVER PRODUTO
+@login_required(login_url='/admin/login/')
+def produto_remover(request, id):
+    produto = get_object_or_404(Produto, id=id)
+    produto.delete()
+    return redirect('dashboard')

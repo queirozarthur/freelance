@@ -8,7 +8,7 @@
             <p class="text-gray-500">Visão geral do estoque</p>
         </div>
         
-        <a href="#" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 shadow-lg transition">
+        <a href="{% url 'produto_criar' %}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 shadow-lg transition">
             <i data-lucide="plus" class="w-5 h-5"></i>
             Novo Produto
         </a>
@@ -28,8 +28,8 @@
                 {% for produto in produtos %}
                 <tr class="hover:bg-gray-50 transition">
                     <td class="px-6 py-4 flex items-center gap-4">
-                        {% if produto.imagem %}
-                            <img src="{{ produto.imagem.url }}" class="w-12 h-12 rounded-lg object-cover border border-gray-200">
+                        {% if produto.foto_principal %}
+                            <img src="{{ produto.foto_principal.url }}" class="w-12 h-12 rounded-lg object-cover border border-gray-200">
                         {% else %}
                             <div class="w-12 h-12 rounded-lg bg-gray-200 flex items-center justify-center text-gray-400">?</div>
                         {% endif %}

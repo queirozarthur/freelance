@@ -5,12 +5,18 @@ def home(request):
     colecoes = Colecao.objects.filter(ativa=True).prefetch_related('produtos')
     return render(request, 'loja/home.html', {'colecoes': colecoes})
 
-# Nova função: Detalhes do Produto
+
 def produto_detail(request, id):
     produto = get_object_or_404(Produto, id=id)
-    # Pega as variações (P, M, G) desse produto
     variacoes = produto.variacoes.filter(estoque_disponivel=True)
     return render(request, 'loja/produto_detail.html', {
         'produto': produto,
         'variacoes': variacoes
     })
+
+def sobre(request):
+
+    context = {
+        'titulo_pagina': 'Sobre Nós - Minha Loja'
+    }
+    return render(request, 'sobre.html', context)

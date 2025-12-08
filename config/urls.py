@@ -20,9 +20,11 @@ from django.conf import settings
 from django.conf.urls.static import static
 from loja.views import home
 from loja.views import produto_detail
+from loja.views import sobre
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home, name='home'),
     path('produto/<int:id>/', produto_detail, name='produto_detail'),
+    path('sobre/', sobre, name='sobre'),    
 ] + static(settings.MEDIA_ROOT, document_root=settings.MEDIA_ROOT)

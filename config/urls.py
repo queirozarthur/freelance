@@ -26,6 +26,8 @@ from loja.views import produto_remover
 from loja.views import produto_editar
 from loja.views import produto_criar
 from loja.views import lista_produtos 
+from loja.views import colecao_criar 
+
 
 
 
@@ -39,4 +41,5 @@ urlpatterns = [
     path('produto/editar/<int:id>/', produto_editar, name='produto_editar'),
     path('produto/remover/<int:id>/', produto_remover, name='produto_remover'), 
     path('produtos/', lista_produtos, name='lista_produtos'),
+    path('colecao/nova/', colecao_criar, name='colecao_criar'),
 ] + static(settings.MEDIA_ROOT, document_root=settings.MEDIA_ROOT)

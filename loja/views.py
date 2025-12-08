@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Colecao, Produto
 from django.contrib.auth.decorators import login_required
-from .forms import ProdutoForm
+from .forms import ProdutoForm, ColecaoForm
 
 def home(request):
     colecoes = Colecao.objects.filter(ativa=True).prefetch_related('produtos')
@@ -81,3 +81,15 @@ def lista_produtos(request):
     colecoes = Colecao.objects.prefetch_related('produtos').all()
     
     return render(request, 'loja/produtos.html', {'colecoes': colecoes})
+
+@login_required(login_url='/admin/login/')
+def colecao_criar(request):
+    if request.method == 'POST':
+        form = ColecaoForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('dashboard') 
+    else:
+        form = ColecaoForm()
+    
+    return render(request, 'loja/colecao_form.html', {'form': form})

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Colecao, Produto, ProdutoVariacao
+from .models import Colecao, Produto, ProdutoVariacao, Tamanho
 
 
 class VariacaoInline(admin.TabularInline):
@@ -12,3 +12,4 @@ class ProdutoAdmin(admin.ModelAdmin):
     list_display = ('nome', 'colecao', 'preco', 'ativo')
 
 admin.site.register(Colecao)
+admin.site.register(Tamanho)

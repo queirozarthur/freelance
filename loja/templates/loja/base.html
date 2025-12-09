@@ -32,7 +32,6 @@
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         
-        /* Animações Globais */
         @keyframes scaleIn { from { transform: scale(1.1); opacity: 0; } to { transform: scale(1); opacity: 1; } }
         .animate-hero-image { animation: scaleIn 1.5s ease-out forwards; }
 
@@ -88,69 +87,75 @@
 
         <div id="cart-footer" class="border-t border-muted p-6 space-y-4 bg-muted/20 hidden">
             
-            <div class="flex items-center justify-between text-lg font-medium">
-                <span>Total</span>
-                <span id="cart-total-price" class="font-serif">R$ 0,00</span>
+            <div class="bg-white p-3 rounded-lg border border-gray-200">
+                <label class="block text-xs font-medium text-gray-700 mb-1">Possui um cupom?</label>
+                <div class="flex gap-2">
+                    <input type="text" id="cupom-input" placeholder="Código" class="flex-1 text-sm border border-gray-300 rounded-md px-3 py-1.5 focus:outline-none focus:border-black uppercase">
+                    <button onclick="aplicarCupom()" class="bg-black text-white px-3 py-1.5 rounded-md text-xs font-medium hover:bg-gray-800">
+                        APLICAR
+                    </button>
+                </div>
+                <p id="msg-cupom" class="text-xs mt-1 hidden"></p>
+            </div>
+
+            <div class="space-y-1">
+                <div class="flex items-center justify-between text-sm text-gray-500">
+                    <span>Subtotal</span>
+                    <span id="cart-subtotal">R$ 0,00</span>
+                </div>
+                
+                <div id="row-desconto" class="flex items-center justify-between text-sm text-green-600 font-medium hidden">
+                    <span>Desconto <span id="label-cupom"></span></span>
+                    <span id="cart-discount">- R$ 0,00</span>
+                </div>
+
+                <div class="flex items-center justify-between text-lg font-medium pt-2 border-t border-gray-200">
+                    <span>Total</span>
+                    <span id="cart-total-price" class="font-serif">R$ 0,00</span>
+                </div>
             </div>
             
-            <div class="space-y-4">
+            <div class="space-y-4 pt-2">
                 <h3 class="text-sm font-bold text-gray-900 uppercase tracking-widest mb-4">
                     Método de Pagamento
                 </h3>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    
+                <div class="grid grid-cols-3 gap-2 sm:gap-4">
                     <label class="cursor-pointer relative">
                         <input type="radio" name="metodo_pagamento" value="pix" class="peer sr-only" checked>
-                        <div class="p-4 border rounded-xl flex flex-col items-center justify-center gap-2 transition-all duration-200
-                                    bg-white border-gray-200 text-gray-600
-                                    hover:border-black hover:shadow-md
-                                    peer-checked:border-black peer-checked:bg-black peer-checked:text-white peer-checked:shadow-lg">
-                            
-                            <i data-lucide="qr-code" class="w-6 h-6 mb-1"></i>
-                            <span class="font-bold text-sm">PIX</span>
-                            <span class="text-xs opacity-70">-5% OFF</span>
+                        <div class="p-2 sm:p-4 border rounded-xl flex flex-col items-center justify-center gap-1 sm:gap-2 transition-all duration-200 bg-white border-gray-200 text-gray-600 hover:border-black hover:shadow-md peer-checked:border-black peer-checked:bg-black peer-checked:text-white peer-checked:shadow-lg h-full">
+                            <i data-lucide="qr-code" class="w-5 h-5 sm:w-6 sm:h-6 mb-0.5 sm:mb-1"></i>
+                            <span class="font-bold text-[10px] sm:text-sm leading-tight text-center">PIX</span>
+                            <span class="text-[9px] sm:text-xs opacity-70 leading-tight text-center">-5% OFF</span>
                         </div>
-                        
-                        <div class="absolute top-2 right-2 opacity-0 peer-checked:opacity-100 transition-opacity">
-                            <i data-lucide="check-circle-2" class="w-4 h-4 text-white"></i>
+                        <div class="absolute top-1 right-1 sm:top-2 sm:right-2 opacity-0 peer-checked:opacity-100 transition-opacity">
+                            <i data-lucide="check-circle-2" class="w-3 h-3 sm:w-4 sm:h-4 text-white"></i>
                         </div>
                     </label>
 
                     <label class="cursor-pointer relative">
                         <input type="radio" name="metodo_pagamento" value="cartao" class="peer sr-only">
-                        <div class="p-4 border rounded-xl flex flex-col items-center justify-center gap-2 transition-all duration-200
-                                    bg-white border-gray-200 text-gray-600
-                                    hover:border-black hover:shadow-md
-                                    peer-checked:border-black peer-checked:bg-black peer-checked:text-white peer-checked:shadow-lg">
-                            
-                            <i data-lucide="credit-card" class="w-6 h-6 mb-1"></i>
-                            <span class="font-bold text-sm">Cartão</span>
-                            <span class="text-xs opacity-70">Até 12x</span>
+                        <div class="p-2 sm:p-4 border rounded-xl flex flex-col items-center justify-center gap-1 sm:gap-2 transition-all duration-200 bg-white border-gray-200 text-gray-600 hover:border-black hover:shadow-md peer-checked:border-black peer-checked:bg-black peer-checked:text-white peer-checked:shadow-lg h-full">
+                            <i data-lucide="credit-card" class="w-5 h-5 sm:w-6 sm:h-6 mb-0.5 sm:mb-1"></i>
+                            <span class="font-bold text-[10px] sm:text-sm leading-tight text-center">Cartão</span>
+                            <span class="text-[9px] sm:text-xs opacity-70 leading-tight text-center">Até 12x</span>
                         </div>
-                        
-                        <div class="absolute top-2 right-2 opacity-0 peer-checked:opacity-100 transition-opacity">
-                            <i data-lucide="check-circle-2" class="w-4 h-4 text-white"></i>
+                        <div class="absolute top-1 right-1 sm:top-2 sm:right-2 opacity-0 peer-checked:opacity-100 transition-opacity">
+                            <i data-lucide="check-circle-2" class="w-3 h-3 sm:w-4 sm:h-4 text-white"></i>
                         </div>
                     </label>
 
                     <label class="cursor-pointer relative">
                         <input type="radio" name="metodo_pagamento" value="dinheiro" class="peer sr-only">
-                        <div class="p-4 border rounded-xl flex flex-col items-center justify-center gap-2 transition-all duration-200
-                                    bg-white border-gray-200 text-gray-600
-                                    hover:border-black hover:shadow-md
-                                    peer-checked:border-black peer-checked:bg-black peer-checked:text-white peer-checked:shadow-lg">
-                            
-                            <i data-lucide="banknote" class="w-6 h-6 mb-1"></i>
-                            <span class="font-bold text-sm">Dinheiro</span>
-                            <span class="text-xs opacity-70">Na entrega</span>
+                        <div class="p-2 sm:p-4 border rounded-xl flex flex-col items-center justify-center gap-1 sm:gap-2 transition-all duration-200 bg-white border-gray-200 text-gray-600 hover:border-black hover:shadow-md peer-checked:border-black peer-checked:bg-black peer-checked:text-white peer-checked:shadow-lg h-full">
+                            <i data-lucide="banknote" class="w-5 h-5 sm:w-6 sm:h-6 mb-0.5 sm:mb-1"></i>
+                            <span class="font-bold text-[10px] sm:text-sm leading-tight text-center">Dinheiro</span>
+                            <span class="text-[9px] sm:text-xs opacity-70 leading-tight text-center">Entrega</span>
                         </div>
-                        
-                        <div class="absolute top-2 right-2 opacity-0 peer-checked:opacity-100 transition-opacity">
-                            <i data-lucide="check-circle-2" class="w-4 h-4 text-white"></i>
+                        <div class="absolute top-1 right-1 sm:top-2 sm:right-2 opacity-0 peer-checked:opacity-100 transition-opacity">
+                            <i data-lucide="check-circle-2" class="w-3 h-3 sm:w-4 sm:h-4 text-white"></i>
                         </div>
                     </label>
-
                 </div>
             </div>
 
@@ -171,14 +176,17 @@
     <script>
         const WHATSAPP_NUMBER = "5582993186971"; 
         let cart = JSON.parse(localStorage.getItem('loja_cart')) || [];
+        
+        // Variáveis globais de cupom
+        let cupomAtivo = null; // { codigo: 'NATAL10', percentual: 10 }
+        let valorDesconto = 0;
 
-        // Inicialização
         document.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
             updateCartUI();
         });
 
-
+        // Scroll Navbar Logic
         window.addEventListener('scroll', () => {
             const nav = document.querySelector('nav');
             if (window.scrollY > 50) {
@@ -189,7 +197,6 @@
             } else {
                 nav.classList.remove('bg-white/95', 'shadow-sm', 'text-black');
                 nav.classList.add('bg-white/10', 'border-white/10');
-
                 nav.querySelectorAll('i').forEach(icon => icon.classList.replace('text-black', 'text-white'));
                 nav.querySelectorAll('a').forEach(link => link.classList.add('text-white'));
             }
@@ -211,10 +218,8 @@
             }
         }
 
-
         function addToCart(id, name, price, image, size = null) {
             const priceFloat = parseFloat(String(price).replace(',', '.'));
-            
             const existingItem = cart.find(item => item.id === id);
             
             if (existingItem) { 
@@ -225,38 +230,15 @@
             
             saveCart();
             updateCartUI();
-            
             showSuccessModal(name);
         }
+
         function removeFromCart(id) {
             cart = cart.filter(item => item.id !== id);
+            // Se esvaziar o carrinho, reseta cupom
+            if(cart.length === 0) resetarCupom();
             saveCart();
             updateCartUI();
-        }
-
-        function showSuccessModal(productName) {
-            const modal = document.getElementById('success-modal');
-            const msgElement = document.getElementById('success-modal-msg');
-            
-            msgElement.innerHTML = `O produto <strong>${productName}</strong> foi adicionado com sucesso. Deseja finalizar agora?`;
-            
-
-            modal.classList.remove('hidden');
-            lucide.createIcons();
-        }
-
-        function closeSuccessModal() {
-            const modal = document.getElementById('success-modal');
-            modal.classList.add('hidden');
-        }
-
-        function finalizeAction() {
-            closeSuccessModal(); 
-            
-            const drawer = document.getElementById('cart-drawer');
-            if(drawer.classList.contains('translate-x-full')) {
-                toggleCart(); 
-            }
         }
 
         function updateQuantity(id, delta) {
@@ -270,11 +252,54 @@
 
         function saveCart() { localStorage.setItem('loja_cart', JSON.stringify(cart)); }
 
+        // --- LÓGICA DE CUPOM ---
+        function aplicarCupom() {
+            const codigo = document.getElementById('cupom-input').value.trim();
+            const msgEl = document.getElementById('msg-cupom');
+
+            if (!codigo) return;
+
+            // Chama o Backend Django
+            fetch(`/api/validar-cupom/?codigo=${codigo}`)
+                .then(response => response.json())
+                .then(data => {
+                    msgEl.classList.remove('hidden');
+                    if (data.valido) {
+                        cupomAtivo = { codigo: codigo, percentual: data.desconto };
+                        msgEl.innerText = data.mensagem;
+                        msgEl.className = "text-xs mt-1 text-green-600 font-medium";
+                        updateCartUI(); // Recalcula valores
+                    } else {
+                        resetarCupom();
+                        msgEl.innerText = data.mensagem;
+                        msgEl.className = "text-xs mt-1 text-red-500";
+                    }
+                })
+                .catch(err => {
+                    console.error("Erro ao validar cupom", err);
+                    msgEl.innerText = "Erro ao validar cupom.";
+                });
+        }
+
+        function resetarCupom() {
+            cupomAtivo = null;
+            valorDesconto = 0;
+            const msgEl = document.getElementById('msg-cupom');
+            if(msgEl) msgEl.innerText = "";
+            document.getElementById('cupom-input').value = "";
+            updateCartUI();
+        }
+
         function updateCartUI() {
             const container = document.getElementById('cart-items-container');
             const badge = document.getElementById('cart-badge');
             const footer = document.getElementById('cart-footer');
+            
+            const subtotalEl = document.getElementById('cart-subtotal');
+            const discountEl = document.getElementById('cart-discount');
             const totalPriceEl = document.getElementById('cart-total-price');
+            const rowDesconto = document.getElementById('row-desconto');
+            const labelCupom = document.getElementById('label-cupom');
 
             const totalQty = cart.reduce((acc, item) => acc + item.quantity, 0);
             badge.innerText = totalQty;
@@ -297,9 +322,7 @@
                         <div class="flex-1 min-w-0 flex flex-col justify-between py-1">
                             <div>
                                 <h3 class="font-medium text-sm text-foreground truncate">${item.name}</h3>
-                                
                                 ${item.size ? `<p class="text-xs text-gray-500 mt-0.5">Tam: ${item.size}</p>` : ''}
-                                
                                 <p class="text-xs text-muted-foreground mt-1">R$ ${item.price.toFixed(2)}</p>
                             </div>
                             <div class="flex items-center justify-between mt-2">
@@ -313,7 +336,23 @@
                         </div>
                     </div>`).join('');
             }
-            const total = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+
+            // Cálculos
+            const subtotal = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+            
+            valorDesconto = 0;
+            if (cupomAtivo) {
+                valorDesconto = subtotal * (cupomAtivo.percentual / 100);
+                rowDesconto.classList.remove('hidden');
+                labelCupom.innerText = `(${cupomAtivo.codigo})`;
+                discountEl.innerText = `- R$ ${valorDesconto.toFixed(2)}`;
+            } else {
+                rowDesconto.classList.add('hidden');
+            }
+
+            const total = subtotal - valorDesconto;
+
+            subtotalEl.innerText = subtotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
             totalPriceEl.innerText = total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
             lucide.createIcons();
         }
@@ -324,7 +363,8 @@
                 return;
             }
             
-            const total = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+            const subtotal = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+            const total = subtotal - valorDesconto;
             const refId = Math.random().toString(36).substring(2, 7).toUpperCase();
             
             const paymentInput = document.querySelector('input[name="metodo_pagamento"]:checked');
@@ -335,7 +375,6 @@
             }
 
             const paymentValue = paymentInput.value;
-
             const nomesPagamento = {
                 'pix': 'PIX (5% OFF)',
                 'cartao': 'Cartão de Crédito/Débito',
@@ -350,20 +389,45 @@
                 msg += `▪ ${item.quantity}x ${item.name}${sizeInfo} - R$ ${(item.price * item.quantity).toFixed(2)}\n`; 
             });
 
-            msg += `\n*Total:* R$ ${total.toFixed(2)}`;
+            msg += `\n*Subtotal:* R$ ${subtotal.toFixed(2)}`;
+            
+            if (cupomAtivo) {
+                msg += `\n*Cupom:* ${cupomAtivo.codigo} (-R$ ${valorDesconto.toFixed(2)})`;
+            }
+
+            msg += `\n*TOTAL FINAL:* R$ ${total.toFixed(2)}`;
             msg += `\n*Forma de Pagamento:* ${nomeFinalPagamento}`;
 
             window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+
+        // --- MODAL DE SUCESSO ---
+        function showSuccessModal(productName) {
+            const modal = document.getElementById('success-modal');
+            const msgElement = document.getElementById('success-modal-msg');
+            msgElement.innerHTML = `O produto <strong>${productName}</strong> foi adicionado com sucesso. Deseja finalizar agora?`;
+            modal.classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function closeSuccessModal() {
+            document.getElementById('success-modal').classList.add('hidden');
+        }
+
+        function finalizeAction() {
+            closeSuccessModal(); 
+            const drawer = document.getElementById('cart-drawer');
+            if(drawer.classList.contains('translate-x-full')) {
+                toggleCart(); 
+            }
         }
     </script>
 
     <div id="success-modal" class="fixed inset-0 z-[80] hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
         <div class="fixed inset-0 bg-black/40 backdrop-blur-sm transition-opacity" onclick="closeSuccessModal()"></div>
-
         <div class="fixed inset-0 z-10 overflow-y-auto">
             <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
                 <div class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
-                    
                     <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
                         <div class="sm:flex sm:items-start">
                             <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-green-100 sm:mx-0 sm:h-10 sm:w-10">
@@ -372,23 +436,14 @@
                             <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
                                 <h3 class="text-lg font-serif font-medium leading-6 text-gray-900" id="modal-title">Produto Adicionado!</h3>
                                 <div class="mt-2">
-                                    <p id="success-modal-msg" class="text-sm text-gray-500">
-                                        O item foi adicionado à sua sacola com sucesso.
-                                    </p>
+                                    <p id="success-modal-msg" class="text-sm text-gray-500">O item foi adicionado à sua sacola com sucesso.</p>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                     <div class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6 gap-2">
-                        <button type="button" onclick="finalizeAction()" 
-                                class="inline-flex w-full justify-center rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-800 sm:ml-3 sm:w-auto">
-                            Finalizar Compra
-                        </button>
-                        <button type="button" onclick="closeSuccessModal()" 
-                                class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto">
-                            Continuar Comprando
-                        </button>
+                        <button type="button" onclick="finalizeAction()" class="inline-flex w-full justify-center rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-800 sm:ml-3 sm:w-auto">Finalizar Compra</button>
+                        <button type="button" onclick="closeSuccessModal()" class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto">Continuar Comprando</button>
                     </div>
                 </div>
             </div>

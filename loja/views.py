@@ -1,8 +1,10 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Colecao, Produto
+from .models import Colecao, Produto, Cupom
 from django.contrib.auth.decorators import login_required
 from .forms import ProdutoForm, ColecaoForm
 from django.contrib import messages
+from django.http import JsonResponse
+from .forms import CupomForm
 
 def home(request):
     colecoes = Colecao.objects.filter(ativa=True).prefetch_related('produtos')
@@ -34,12 +36,12 @@ def dashboard(request):
         return redirect('home')
 
     produtos = Produto.objects.all().order_by('-id')
+    cupons = Cupom.objects.all().order_by('-id')
     
-    # Se você tiver Coleção, busque aqui também:
-    # colecoes = Colecao.objects.all() 
 
     context = {
         'produtos': produtos,
+        'cupons': cupons
         # 'colecoes': colecoes
     }
     return render(request, 'loja/dashboard.html', context)
@@ -110,3 +112,39 @@ def colecao_criar(request):
         form = ColecaoForm()
     
     return render(request, 'loja/colecao_form.html', {'form': form})
+
+
+def validar_cupom(request):
+    codigo = request.GET.get('codigo')
+    try:
+        cupom = Cupom.objects.get(codigo__iexact=codigo, ativo=True)
+        return JsonResponse({
+            'valido': True,
+            'desconto': cupom.desconto_porcentagem,
+            'mensagem': f'Cupom de {cupom.desconto_porcentagem}% aplicado!'
+        })
+    except Cupom.DoesNotExist:
+        return JsonResponse({
+            'valido': False,
+            'mensagem': 'Cupom inválido ou expirado.'
+        })
+    
+
+
+@login_required(login_url='/admin/login/')
+def cupom_criar(request):
+    if request.method == 'POST':
+        form = CupomForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('dashboard')
+    else:
+        form = CupomForm()
+    
+    return render(request, 'loja/cupom_form.html', {'form': form, 'titulo': 'Novo Cupom'})
+
+@login_required(login_url='/admin/login/')
+def cupom_remover(request, id):
+    cupom = get_object_or_404(Cupom, id=id)
+    cupom.delete()
+    return redirect('dashboard')

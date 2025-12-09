@@ -14,6 +14,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from loja import views
 from django.contrib import admin
 from django.urls import path
 from django.conf import settings
@@ -42,6 +43,10 @@ urlpatterns = [
     path('produto/remover/<int:id>/', produto_remover, name='produto_remover'), 
     path('produtos/', lista_produtos, name='lista_produtos'),
     path('colecao/nova/', colecao_criar, name='colecao_criar'),
+    path('dashboard/cupom/criar/', views.cupom_criar, name='cupom_criar'),
+    path('dashboard/cupom/remover/<int:id>/', views.cupom_remover, name='cupom_remover'),
+    path('api/validar-cupom/', views.validar_cupom, name='validar_cupom'),
+    path('dashboard/cupom/criar/', views.cupom_criar, name='cupom_criar'),
 ] + static(settings.MEDIA_ROOT, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:

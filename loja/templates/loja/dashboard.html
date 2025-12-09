@@ -1,6 +1,6 @@
 {% extends 'loja/admin_base.html' %} 
 
-{% block title %}Produtos | Admin{% endblock %}
+{% block title %}Dashboard | Admin{% endblock %}
 
 {% block content %}
 
@@ -16,8 +16,7 @@
         </a>
     </div>
 
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-        
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-16">
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse min-w-[600px]">
                 <thead class="bg-gray-50 text-gray-500 uppercase text-xs font-semibold">
@@ -66,7 +65,7 @@
                             </a>
 
                             <a href="#" 
-                               onclick="confirmarExclusao(event, '{% url 'produto_remover' produto.id %}', '{{ produto.nome }}')" 
+                               onclick="confirmarExclusao(event, '{% url 'produto_remover' produto.id %}', '{{ produto.nome }}', 'produto')" 
                                class="text-red-600 hover:text-red-900 font-semibold inline-flex items-center gap-1">
                                 <i data-lucide="trash-2" class="w-4 h-4"></i> Excluir
                             </a>
@@ -88,17 +87,99 @@
         </div>
     </div>
 
+
+    <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-6 gap-4 pt-4 border-t border-gray-200">
+        <div>
+            <h2 class="text-2xl md:text-3xl font-bold text-gray-800">Gerenciar Cupons</h2>
+            <p class="text-gray-500 text-sm">Códigos de desconto para clientes</p>
+        </div>
+        
+        <a href="{% url 'cupom_criar' %}" class="bg-black hover:bg-gray-800 text-white px-4 py-3 rounded-lg flex items-center justify-center gap-2 shadow-lg transition w-full md:w-auto text-sm font-bold">
+            <i data-lucide="ticket" class="w-5 h-5"></i>
+            Novo Cupom
+        </a>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-12">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse min-w-[600px]">
+                <thead class="bg-gray-50 text-gray-500 uppercase text-xs font-semibold">
+                    <tr>
+                        <th class="px-6 py-4">Código</th>
+                        <th class="px-6 py-4">Desconto</th>
+                        <th class="px-6 py-4">Status</th>
+                        <th class="px-6 py-4 text-right">Ações</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100">
+                    {% for cupom in cupons %}
+                    <tr class="hover:bg-gray-50 transition">
+                        <td class="px-6 py-4">
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="tag" class="w-4 h-4 text-gray-400"></i>
+                                <span class="font-bold text-gray-900 uppercase tracking-wide">{{ cupom.codigo }}</span>
+                            </div>
+                        </td>
+
+                        <td class="px-6 py-4 text-green-600 font-bold whitespace-nowrap">
+                            {{ cupom.desconto_porcentagem }}% OFF
+                        </td>
+
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            {% if cupom.ativo %}
+                                <span class="px-2 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700 border border-green-200 flex items-center gap-1 w-fit">
+                                    Ativo
+                                </span>
+                            {% else %}
+                                <span class="px-2 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-700 border border-red-200 flex items-center gap-1 w-fit">
+                                    Inativo
+                                </span>
+                            {% endif %}
+                        </td>
+
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <a href="#" 
+                               onclick="confirmarExclusao(event, '{% url 'cupom_remover' cupom.id %}', '{{ cupom.codigo }}', 'cupom')" 
+                               class="text-red-600 hover:text-red-900 font-semibold inline-flex items-center gap-1">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i> Excluir
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="px-6 py-12 text-center text-gray-500">
+                            <div class="flex flex-col items-center justify-center">
+                                <i data-lucide="ticket" class="w-12 h-12 text-gray-300 mb-2"></i>
+                                <p>Nenhum cupom ativo.</p>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
     <script>
-        function confirmarExclusao(ev, url, nomeProduto) {
-            ev.preventDefault(); // Impede de abrir o link imediatamente
+        // Função atualizada para servir tanto para PRODUTO quanto para CUPOM
+        function confirmarExclusao(ev, url, nomeItem, tipo) {
+            ev.preventDefault(); 
+
+            let texto = "";
+            if (tipo === 'cupom') {
+                texto = `Você vai apagar o cupom <strong>${nomeItem}</strong>.`;
+            } else {
+                texto = `Você vai excluir o produto <strong>${nomeItem}</strong>.`;
+            }
 
             Swal.fire({
                 title: 'Tem certeza?',
-                html: `Você vai excluir <strong>${nomeProduto}</strong>.<br>Essa ação não pode ser desfeita!`,
+                html: `${texto}<br>Essa ação não pode ser desfeita!`,
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#000000', 
-                cancelButtonColor: '#d33',    
+                cancelButtonColor: '#d33',     
                 confirmButtonText: 'Sim, excluir!',
                 cancelButtonText: 'Cancelar',
                 reverseButtons: true

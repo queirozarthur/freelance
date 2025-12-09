@@ -1,0 +1,55 @@
+{% extends 'loja/admin_base.html' %}
+
+{% block title %}Novo Cupom | Admin{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto">
+    
+    <div class="mb-8">
+        <h2 class="text-2xl font-bold text-gray-800">Criar Novo Cupom</h2>
+        <p class="text-gray-500 text-sm">Preencha os dados abaixo para criar um código de desconto.</p>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden p-6 md:p-8">
+        <form class="space-y-6" action="" method="POST">
+            {% csrf_token %}
+            
+            {% for field in form %}
+            <div>
+                <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                    {{ field.label }}
+                </label>
+                
+                <div class="relative">
+                    {{ field }}
+                </div>
+                
+                {% if field.help_text %}
+                    <p class="mt-1 text-xs text-gray-500">{{ field.help_text }}</p>
+                {% endif %}
+                
+                {% if field.errors %}
+                    <p class="text-red-500 text-xs mt-1 font-medium flex items-center gap-1">
+                        <i data-lucide="alert-circle" class="w-3 h-3"></i>
+                        {{ field.errors.0 }}
+                    </p>
+                {% endif %}
+            </div>
+            {% endfor %}
+
+            <div class="flex gap-4 pt-4 border-t border-gray-100 mt-6">
+                <a href="{% url 'dashboard' %}" class="flex-1 text-center py-3 px-4 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors">
+                    Cancelar
+                </a>
+                <button type="submit" class="flex-1 flex justify-center py-3 px-4 border border-transparent rounded-lg text-sm font-medium text-white bg-black hover:bg-gray-800 transition-colors shadow-lg">
+                    Salvar Cupom
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    lucide.createIcons();
+</script>
+{% endblock %}

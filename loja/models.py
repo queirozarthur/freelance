@@ -34,3 +34,10 @@ class ProdutoVariacao(models.Model):
     def __str__(self):
         return f"{self.produto.nome} - {self.tamanho}"
     
+class Cupom(models.Model):
+    codigo = models.CharField(max_length=20, unique=True)
+    desconto_porcentagem = models.IntegerField(verbose_name="Desconto (%)")
+    ativo = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f"{self.codigo} ({self.desconto_porcentagem}%)"

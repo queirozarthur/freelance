@@ -9,6 +9,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" type="image/png" href="{% static 'loja/img/favicon.png' %}">
     
     <script>
         tailwind.config = {
@@ -66,9 +67,38 @@
     {% block content %}
     {% endblock %}
 
-    <footer class="border-t border-muted py-12 bg-white mt-auto">
-        <div class="container mx-auto px-4 text-center">
-            <p class="text-sm text-muted-foreground">© 2025 LIVÍ. Todos os direitos reservados.</p>
+    <footer class="border-t border-muted bg-white mt-auto pt-16 pb-8">
+        <div class="container mx-auto px-4">
+            
+            <div class="flex flex-col items-center justify-center text-center space-y-6 mb-12">
+                
+                <h2 class="text-3xl font-serif font-medium tracking-tight text-gray-900">
+                    LIVÍ
+                </h2>
+
+                <p class="text-gray-500 max-w-md mx-auto text-sm md:text-base font-light">
+                    Acompanhe nossos lançamentos exclusivos, bastidores e inspirações diárias.
+                </p>
+
+                <a href="https://www.instagram.com/livibylm/I" 
+                   target="_blank" 
+                   class="group inline-flex items-center justify-center gap-3 bg-black text-white px-8 py-3.5 rounded-full text-sm font-semibold tracking-wide transition-all duration-300 hover:bg-gray-800 hover:shadow-lg hover:-translate-y-1 active:scale-95">
+                    
+                    <i data-lucide="instagram" class="w-5 h-5 transition-transform duration-500 group-hover:rotate-12"></i>
+                    
+                    <span>Siga-nos no Instagram</span>
+                </a>
+
+            </div>
+
+            <div class="border-t border-gray-100 pt-8 flex flex-col md:flex-row items-center justify-between text-xs text-gray-400 gap-4">
+                <p>© 2025 LIVÍ. Todos os direitos reservados.</p>
+                
+                <div class="flex gap-4">
+                    <a href="#" class="hover:text-black transition-colors">Termos de Uso</a>
+                    <a href="#" class="hover:text-black transition-colors">Política de Privacidade</a>
+                </div>
+            </div>
         </div>
     </footer>
 

@@ -5,6 +5,7 @@ from .forms import ProdutoForm, ColecaoForm
 from django.contrib import messages
 from django.http import JsonResponse
 from .forms import CupomForm
+from django.contrib.auth.views import LoginView
 
 def home(request):
     colecoes = Colecao.objects.filter(ativa=True).prefetch_related('produtos')
@@ -148,3 +149,11 @@ def cupom_remover(request, id):
     cupom = get_object_or_404(Cupom, id=id)
     cupom.delete()
     return redirect('dashboard')
+
+class CustomLoginView(LoginView):
+    template_name = 'loja/login.html'
+
+    def form_valid(self, form):
+        # Aqui enviamos a mensagem antes de logar
+        messages.success(self.request, "Login realizado com sucesso! Bem-vinda de volta.")
+        return super().form_valid(form)

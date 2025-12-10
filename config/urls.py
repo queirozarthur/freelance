@@ -28,12 +28,15 @@ from loja.views import produto_editar
 from loja.views import produto_criar
 from loja.views import lista_produtos 
 from loja.views import colecao_criar 
+from django.contrib.auth import views as auth_views
 
 
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('login/', views.CustomLoginView.as_view(), name='login'),
+    path('logout/', auth_views.LogoutView.as_view(next_page='home'), name='logout'),
     path('', home, name='home'),
     path('produto/<int:id>/', produto_detail, name='produto_detail'),
     path('sobre/', sobre, name='sobre'),

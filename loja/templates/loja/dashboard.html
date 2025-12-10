@@ -193,4 +193,22 @@
         lucide.createIcons();
     </script>
 
+
+    {% if messages %}
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                {% for message in messages %}
+                    Swal.fire({
+                        title: 'Sucesso!',
+                        text: '{{ message }}',
+                        icon: 'success',
+                        confirmButtonColor: '#000000', // Preto para combinar com a loja
+                        timer: 3000, // Fecha sozinho em 3 segundos
+                        timerProgressBar: true
+                    });
+                {% endfor %}
+            });
+        </script>
+    {% endif %}
+
 {% endblock %}
